@@ -74,3 +74,22 @@ Open your homepage, `/privacy/`, and `/terms/` over HTTPS. Follow the navigation
 - Terms of Service: https://mycday.com/terms/
 
 Owner: Nora Im. Support: support@mycday.com.
+
+## Authentication email links
+
+Password reset and signup confirmation use `https://mycday.com/auth/`. Publish the
+`auth/` directory (index.html, handoff.js, style.css) together. The static page
+passes valid recovery/signup fragments to the existing `mobile://me` app handler.
+Passwords are changed in the installed app, not on this website. No credentials
+are sent to GitHub Pages, stored in browser storage, or loaded by third-party scripts.
+
+In Supabase → Authentication → URL Configuration, add exactly
+`https://mycday.com/auth/` to Redirect URLs. Keep existing valid redirects, including
+the former ChatGPT site, while older app versions and already-sent emails use them.
+Email templates should use `{{ .ConfirmationURL }}` so Supabase verifies the link
+and respects the app-supplied redirect. Rebuild/update the app to use the new URL.
+
+Verify both a fresh reset email and signup confirmation on a phone with the app
+installed. Expired links should show a request-new-email message; opening `/auth/`
+without a link should show instructions. A reset for another account must retain
+the app's existing account-mismatch protection.
